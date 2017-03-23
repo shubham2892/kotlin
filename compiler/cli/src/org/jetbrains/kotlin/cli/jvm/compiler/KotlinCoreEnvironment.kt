@@ -26,8 +26,6 @@ import com.intellij.core.CoreJavaFileManager
 import com.intellij.core.JavaCoreApplicationEnvironment
 import com.intellij.core.JavaCoreProjectEnvironment
 import com.intellij.ide.highlighter.JavaFileType
-import com.intellij.ide.plugins.PluginManagerCore
-import com.intellij.lang.MetaLanguage
 import com.intellij.lang.java.JavaParserDefinition
 import com.intellij.mock.MockApplication
 import com.intellij.openapi.Disposable
@@ -80,9 +78,6 @@ import org.jetbrains.kotlin.cli.jvm.index.JvmDependenciesDynamicCompoundIndex
 import org.jetbrains.kotlin.cli.jvm.index.JvmDependenciesIndex
 import org.jetbrains.kotlin.cli.jvm.index.JvmUpdateableDependenciesIndexFactory
 import org.jetbrains.kotlin.cli.jvm.index.SingleJavaFileRootsIndex
-import org.jetbrains.kotlin.cli.jvm.modules.CoreJrtFileSystem
-import org.jetbrains.kotlin.cli.jvm.modules.JavaModuleInfo
-import org.jetbrains.kotlin.cli.jvm.modules.ModuleGraph
 import org.jetbrains.kotlin.codegen.extensions.ClassBuilderInterceptorExtension
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
@@ -364,8 +359,6 @@ class KotlinCoreEnvironment private constructor(
     }
 
     companion object {
-        private val ideaCompatibleBuildNumber = "171.9999"
-
         init {
             setCompatibleBuild()
         }
@@ -402,8 +395,7 @@ class KotlinCoreEnvironment private constructor(
 
         @JvmStatic
         private fun setCompatibleBuild() {
-            PluginManagerCore.BUILD_NUMBER = ideaCompatibleBuildNumber
-            System.getProperties().setProperty("idea.plugins.compatible.build", ideaCompatibleBuildNumber)
+            System.getProperties().setProperty("idea.plugins.compatible.build", "171.9999")
         }
 
         @TestOnly
@@ -479,7 +471,6 @@ class KotlinCoreEnvironment private constructor(
             CoreApplicationEnvironment.registerExtensionPoint(Extensions.getRootArea(), ClassFileDecompilers.EP_NAME, ClassFileDecompilers.Decompiler::class.java)
             //
             CoreApplicationEnvironment.registerExtensionPoint(Extensions.getRootArea(), TypeAnnotationModifier.EP_NAME, TypeAnnotationModifier::class.java)
-            CoreApplicationEnvironment.registerExtensionPoint(Extensions.getRootArea(), MetaLanguage.EP_NAME, MetaLanguage::class.java)
         }
 
         private fun registerApplicationExtensionPointsAndExtensionsFrom(configuration: CompilerConfiguration, configFilePath: String) {
