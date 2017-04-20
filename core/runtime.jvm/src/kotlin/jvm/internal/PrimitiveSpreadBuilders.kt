@@ -30,8 +30,9 @@ public abstract class PrimitiveSpreadBuilder<T : Any>(private val size: Int) {
 
     protected fun size(): Int {
         var totalLength = 0
-        for (i in 0..size - 1) {
-            totalLength += spreads[i]?.getSize() ?: 1
+        var i = 0
+        while (i < size) {
+            totalLength += spreads[i++]?.getSize() ?: 1
         }
         return totalLength
     }
@@ -39,7 +40,8 @@ public abstract class PrimitiveSpreadBuilder<T : Any>(private val size: Int) {
     protected fun toArray(values: T, result: T): T {
         var dstIndex = 0
         var copyValuesFrom = 0
-        for (i in 0..size - 1) {
+        var i = 0
+        while (i < size) {
             val spreadArgument = spreads[i]
             if (spreadArgument != null) {
                 if (copyValuesFrom < i) {
@@ -51,6 +53,7 @@ public abstract class PrimitiveSpreadBuilder<T : Any>(private val size: Int) {
                 dstIndex += spreadSize
                 copyValuesFrom = i + 1
             }
+            i++
         }
         if (copyValuesFrom < size) {
             System.arraycopy(values, copyValuesFrom, result, dstIndex, size - copyValuesFrom)

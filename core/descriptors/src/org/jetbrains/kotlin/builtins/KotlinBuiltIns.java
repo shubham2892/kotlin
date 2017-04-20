@@ -63,7 +63,6 @@ public abstract class KotlinBuiltIns {
     public static final Set<FqName> BUILT_INS_PACKAGE_FQ_NAMES = setOf(
             BUILT_INS_PACKAGE_FQ_NAME,
             COLLECTIONS_PACKAGE_FQ_NAME,
-            RANGES_PACKAGE_FQ_NAME,
             ANNOTATION_PACKAGE_FQ_NAME,
             ReflectionTypesKt.getKOTLIN_REFLECT_FQ_NAME(),
             BUILT_INS_PACKAGE_FQ_NAME.child(Name.identifier("internal"))
@@ -92,7 +91,6 @@ public abstract class KotlinBuiltIns {
                 Map<FqName, PackageFragmentDescriptor> nameToFragment = new LinkedHashMap<FqName, PackageFragmentDescriptor>();
                 PackageFragmentDescriptor kotlin = createPackage(provider, nameToFragment, BUILT_INS_PACKAGE_FQ_NAME);
                 PackageFragmentDescriptor kotlinCollections = createPackage(provider, nameToFragment, COLLECTIONS_PACKAGE_FQ_NAME);
-                createPackage(provider, nameToFragment, RANGES_PACKAGE_FQ_NAME);
                 PackageFragmentDescriptor kotlinAnnotation = createPackage(provider, nameToFragment, ANNOTATION_PACKAGE_FQ_NAME);
                 Set<PackageFragmentDescriptor> allImportedByDefault = new LinkedHashSet<PackageFragmentDescriptor>(nameToFragment.values());
 
