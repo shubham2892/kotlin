@@ -344,7 +344,7 @@ public fun String.toDoubleOrNull(): Double? = screenFloatValue(this, java.lang.D
  * Recommended floating point number validation RegEx from the javadoc of `java.lang.Double.valueOf(String)`
  */
 @kotlin.jvm.JvmVersion
-private object ScreenFloatValueRegEx {
+internal object ScreenFloatValueRegEx {
     @JvmField val value = run {
         val Digits = "(\\p{Digit}+)"
         val HexDigits = "(\\p{XDigit}+)"
@@ -364,7 +364,7 @@ private object ScreenFloatValueRegEx {
 }
 
 @kotlin.jvm.JvmVersion
-private inline fun <T> screenFloatValue(str: String, parse: (String) -> T): T? {
+internal inline fun <T> screenFloatValue(str: String, parse: (String) -> T): T? {
     return try {
         if (ScreenFloatValueRegEx.value.matches(str))
             parse(str)

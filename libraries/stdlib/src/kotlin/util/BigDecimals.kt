@@ -5,6 +5,7 @@
 package kotlin
 
 import java.math.BigDecimal
+import java.math.MathContext
 import java.math.RoundingMode
 
 /**
@@ -74,11 +75,30 @@ public inline fun String.toBigDecimal(): BigDecimal = BigDecimal(this)
 
 @SinceKotlin("1.2")
 @kotlin.internal.InlineOnly
+public inline fun String.toBigDecimal(mathContext: MathContext): BigDecimal = BigDecimal(this, mathContext)
+
+@SinceKotlin("1.2")
+public fun String.toBigDecimalOrNull(): BigDecimal? = screenFloatValue(this) { it.toBigDecimal() }
+
+@SinceKotlin("1.2")
+public fun String.toBigDecimalOrNull(mathContext: MathContext): BigDecimal? = screenFloatValue(this) { it.toBigDecimal(mathContext) }
+
+@SinceKotlin("1.2")
+@kotlin.internal.InlineOnly
 public inline fun Int.toBigDecimal(): BigDecimal = BigDecimal(this)
 
 @SinceKotlin("1.2")
 @kotlin.internal.InlineOnly
+public inline fun Int.toBigDecimal(mathContext: MathContext): BigDecimal = BigDecimal(this, mathContext)
+
+@SinceKotlin("1.2")
+@kotlin.internal.InlineOnly
 public inline fun Long.toBigDecimal(): BigDecimal = BigDecimal(this)
+
+@SinceKotlin("1.2")
+@kotlin.internal.InlineOnly
+public inline fun Long.toBigDecimal(mathContext: MathContext): BigDecimal = BigDecimal(this, mathContext)
+
 
 /*
  * JDK documentation recommends using `BigDecimal(String)` instead of `BigDecimal(double)`
@@ -88,6 +108,10 @@ public inline fun Long.toBigDecimal(): BigDecimal = BigDecimal(this)
 @kotlin.internal.InlineOnly
 public inline fun Float.toBigDecimal(): BigDecimal = BigDecimal(this.toString())
 
+@SinceKotlin("1.2")
+@kotlin.internal.InlineOnly
+public inline fun Float.toBigDecimal(mathContext: MathContext): BigDecimal = BigDecimal(this.toString(), mathContext)
+
 /*
  * JDK documentation recommends using `BigDecimal(String)` instead of `BigDecimal(double)`
  * For more details consult http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html
@@ -95,3 +119,7 @@ public inline fun Float.toBigDecimal(): BigDecimal = BigDecimal(this.toString())
 @SinceKotlin("1.2")
 @kotlin.internal.InlineOnly
 public inline fun Double.toBigDecimal(): BigDecimal = BigDecimal(this.toString())
+
+@SinceKotlin("1.2")
+@kotlin.internal.InlineOnly
+public inline fun Double.toBigDecimal(mathContext: MathContext): BigDecimal = BigDecimal(this.toString(), mathContext)

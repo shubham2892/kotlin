@@ -6,6 +6,7 @@ package kotlin
 
 import java.math.BigInteger
 import java.math.BigDecimal
+import java.math.MathContext
 
 /**
  * Enables the use of the `+` operator for [BigInteger] instances.
@@ -90,6 +91,31 @@ public inline fun String.toBigInteger(): BigInteger = BigInteger(this)
 
 @SinceKotlin("1.2")
 @kotlin.internal.InlineOnly
+public inline fun String.toBigInteger(radix: Int): BigInteger = BigInteger(this, checkRadix(radix))
+
+@SinceKotlin("1.2")
+public fun String.toBigIntegerOrNull(): BigInteger? = toBigIntegerOrNull(10)
+
+@SinceKotlin("1.2")
+public fun String.toBigIntegerOrNull(radix: Int): BigInteger? {
+    checkRadix(radix)
+    val length = this.length
+    when (length) {
+        0 -> return null
+        1 -> if (digitOf(this[0], radix) < 0) return null
+        else -> {
+            val start = if (this[0] == '-') 1 else 0
+            for (index in start until length) {
+                if (digitOf(this[index], radix) < 0)
+                    return null
+            }
+        }
+    }
+    return toBigInteger(radix)
+}
+
+@SinceKotlin("1.2")
+@kotlin.internal.InlineOnly
 public inline fun Int.toBigInteger(): BigInteger = BigInteger.valueOf(this.toLong())
 
 @SinceKotlin("1.2")
@@ -100,3 +126,8 @@ public inline fun Long.toBigInteger(): BigInteger = BigInteger.valueOf(this)
 @SinceKotlin("1.2")
 @kotlin.internal.InlineOnly
 public inline fun BigInteger.toBigDecimal(): BigDecimal = BigDecimal(this)
+
+@SinceKotlin("1.2")
+@kotlin.internal.InlineOnly
+public inline fun BigInteger.toBigDecimal(scale: Int = 0, mathContext: MathContext = MathContext.UNLIMITED): BigDecimal = BigDecimal(this, scale, mathContext)
+
