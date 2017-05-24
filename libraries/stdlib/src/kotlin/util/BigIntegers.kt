@@ -45,13 +45,6 @@ public inline operator fun BigInteger.rem(other: BigInteger): BigInteger = this.
 public inline operator fun BigInteger.unaryMinus(): BigInteger = this.negate()
 
 /**
- * Enables the use of the unary `+` operator for [BigInteger] instances.
- */
-@SinceKotlin("1.2")
-@kotlin.internal.InlineOnly
-public inline operator fun BigInteger.unaryPlus() : BigInteger = this
-
-/**
  * Enables the use of the `++` operator for [BigInteger] instances.
  */
 @SinceKotlin("1.2")

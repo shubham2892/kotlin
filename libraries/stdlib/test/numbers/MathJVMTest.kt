@@ -21,8 +21,6 @@ class MathTest {
         assertEquals(BigInteger("1"), (-a).mod(b))
         assertEquals(BigInteger("-2"), (-a).remainder(b))
 
-        assertEquals(BigInteger("2"), +a)
-        assertEquals(BigInteger("-2"), +(-a))
         assertEquals(BigInteger("3"), a.inc())
         assertEquals(BigInteger("1"), a.dec())
         assertEquals(BigInteger("-3"), a.inv())
@@ -55,8 +53,6 @@ class MathTest {
         assertEquals(BigDecimal("-2"), (-a).mod(b))
         assertEquals(BigDecimal("-2"), (-a).rem(b))
 
-        assertEquals(BigDecimal("2"), +a)
-        assertEquals(BigDecimal("-2"), +(-a))
         assertEquals(BigDecimal("3"), a.inc())
         assertEquals(BigDecimal("1"), a.dec())
 
@@ -86,7 +82,3 @@ class MathTest {
     }
 }
 
-fun main(args: Array<String>) {
-    MathTest().testBigInteger()
-    MathTest().testBigDecimal()
-}

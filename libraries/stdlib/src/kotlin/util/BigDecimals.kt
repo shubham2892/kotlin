@@ -54,13 +54,6 @@ public inline operator fun BigDecimal.rem(other: BigDecimal): BigDecimal = this.
 public inline operator fun BigDecimal.unaryMinus(): BigDecimal = this.negate()
 
 /**
- * Enables the use of the unary `+` operator for [BigDecimal] instances.
- */
-@SinceKotlin("1.2")
-@kotlin.internal.InlineOnly
-public inline operator fun BigDecimal.unaryPlus() : BigDecimal = this
-
-/**
  * Enables the use of the unary `++` operator for [BigDecimal] instances.
  */
 @SinceKotlin("1.2")
