@@ -90,6 +90,7 @@ class DelegationTranslator(
 
     private fun getSuperClass(specifier: KtSuperTypeListEntry): ClassDescriptor =
             CodegenUtil.getSuperClassBySuperTypeListEntry(specifier, bindingContext())
+            ?: error("ClassDescriptor of superType should not be null: ${specifier.text}")
 
     private fun generateDelegates(toClass: ClassDescriptor, field: Field) {
         for ((descriptor, overriddenDescriptor) in DelegationResolver.getDelegates(classDescriptor, toClass)) {

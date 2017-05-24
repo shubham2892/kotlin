@@ -1105,7 +1105,7 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
         }
         private final Map<KtDelegatedSuperTypeEntry, Field> fields = new HashMap<>();
 
-        @NotNull
+        @Nullable
         public Field getInfo(KtDelegatedSuperTypeEntry specifier) {
             return fields.get(specifier);
         }
@@ -1127,6 +1127,8 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
         for (KtSuperTypeListEntry specifier : delegationSpecifiers) {
             if (specifier instanceof KtDelegatedSuperTypeEntry) {
                 KtExpression expression = ((KtDelegatedSuperTypeEntry) specifier).getDelegateExpression();
+                if (expression == null) continue;
+
                 PropertyDescriptor propertyDescriptor = CodegenUtil.getDelegatePropertyIfAny(expression, descriptor, bindingContext);
 
 
@@ -1134,9 +1136,14 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
                     result.addField((KtDelegatedSuperTypeEntry) specifier, propertyDescriptor);
                 }
                 else {
-                    KotlinType expressionType = expression != null ? bindingContext.getType(expression) : null;
+                    KotlinType expressionType = bindingContext.getType(expression);
+                    ClassDescriptor superClass = getSuperClass(specifier);
                     Type asmType =
-                            expressionType != null ? typeMapper.mapType(expressionType) : typeMapper.mapType(getSuperClass(specifier));
+                            expressionType != null ? typeMapper.mapType(expressionType) :
+                            superClass != null ? typeMapper.mapType(superClass) : null;
+
+                    if (asmType == null) continue;
+
                     result.addField((KtDelegatedSuperTypeEntry) specifier, asmType, JvmAbi.DELEGATE_SUPER_FIELD_PREFIX + n);
                 }
                 n++;
@@ -1145,7 +1152,7 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
         return result;
     }
 
-    @NotNull
+    @Nullable
     private ClassDescriptor getSuperClass(@NotNull KtSuperTypeListEntry specifier) {
         return CodegenUtil.getSuperClassBySuperTypeListEntry(specifier, bindingContext);
     }
@@ -1159,6 +1166,8 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
         KtExpression expression = specifier.getDelegateExpression();
 
         DelegationFieldsInfo.Field fieldInfo = fieldsInfo.getInfo(specifier);
+        if (fieldInfo == null) return;
+
         if (fieldInfo.generateField) {
             iv.load(0, classAsmType);
             fieldInfo.getStackValue().store(codegen.gen(expression), iv);
@@ -1604,10 +1613,15 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
         for (KtSuperTypeListEntry specifier : myClass.getSuperTypeListEntries()) {
             if (specifier instanceof KtDelegatedSuperTypeEntry) {
                 DelegationFieldsInfo.Field field = delegationFieldsInfo.getInfo((KtDelegatedSuperTypeEntry) specifier);
+                if (field == null) continue;
+
                 generateDelegateField(field);
                 KtExpression delegateExpression = ((KtDelegatedSuperTypeEntry) specifier).getDelegateExpression();
                 KotlinType delegateExpressionType = delegateExpression != null ? bindingContext.getType(delegateExpression) : null;
-                generateDelegates(getSuperClass(specifier), delegateExpressionType, field);
+                ClassDescriptor superClass = getSuperClass(specifier);
+                if (superClass == null) continue;
+
+                generateDelegates(superClass, delegateExpressionType, field);
             }
         }
     }
