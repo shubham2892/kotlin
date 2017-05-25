@@ -17,12 +17,9 @@
 package org.jetbrains.kotlin.cli.common.arguments;
 
 import com.intellij.util.SmartList;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class CommonCompilerArguments implements Serializable {
     public static final long serialVersionUID = 0L;
@@ -113,11 +110,6 @@ public abstract class CommonCompilerArguments implements Serializable {
     public List<String> freeArgs = new SmartList<>();
 
     public transient ArgumentParseErrors errors = new ArgumentParseErrors();
-
-    @NotNull
-    public static CommonCompilerArguments createDefaultInstance() {
-        return new DummyImpl();
-    }
 
     public static final String WARN = "warn";
     public static final String ERROR = "error";
