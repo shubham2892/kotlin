@@ -3,12 +3,12 @@
 // FILE: A.java
 import java.util.Comparator;
 
-public class A<E> {
+public class Abcdef<E> {
     public A(Comparator<? super E> comparator) {}
 }
 
 // FILE: main.kt
 
 fun foo() {
-    val result: A<String> = A<String> { x, y -> 1 }
+    val result: Abcdef<String> = Abcdef<String> { x, y -> 1 }
 }
