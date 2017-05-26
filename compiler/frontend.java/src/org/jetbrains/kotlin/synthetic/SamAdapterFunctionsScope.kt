@@ -120,7 +120,7 @@ class SamAdapterFunctionsScope(
             type.memberScope.getContributedDescriptors(DescriptorKindFilter.FUNCTIONS)
                     .filterIsInstance<FunctionDescriptor>()
                     .mapNotNull {
-                        extensionForFunction(it.original)?.substituteForReceiverType(type)
+                        getSamForMember(it, type)
                     }
         }
     }
@@ -136,8 +136,17 @@ class SamAdapterFunctionsScope(
     }
 
     override fun getSyntheticConstructors(scope: ResolutionScope, name: Name, location: LookupLocation): Collection<FunctionDescriptor> {
+        val classifier = scope.getContributedClassifier(name, location) ?: return emptyList()
+        if (classifier !is JavaClassDescriptor) return emptyList()
 
-        return emptyList()
+        return arrayListOf<FunctionDescriptor>().apply {
+            for (constructor in classifier.constructors) {
+                if (!SingleAbstractMethodUtils.isSamAdapterNecessary(constructor)) continue
+                if (constructor !is JavaClassConstructorDescriptor) continue
+
+                add(samConstructorForConstructor(constructor))
+            }
+        }
     }
 
     override fun getSyntheticStaticFunctions(scope: ResolutionScope): Collection<FunctionDescriptor> {
@@ -151,6 +160,17 @@ class SamAdapterFunctionsScope(
 
     override fun getSyntheticConstructors(scope: ResolutionScope): Collection<FunctionDescriptor> {
         return emptyList()
+    }
+
+    private fun getSamForMember(descriptor: FunctionDescriptor, receiverType: KotlinType): FunctionDescriptor? {
+        val original = descriptor.original
+        if (!SingleAbstractMethodUtils.isSamAdapterNecessary(original)) return null
+
+        val samMember = when (original) {
+            is JavaClassConstructorDescriptor -> samConstructorForConstructor(original)
+            else -> extensionForFunction(original)
+        }
+        return samMember?.substituteForReceiverType(receiverType)
     }
 
     private fun getSamFunctions(functions: Collection<DeclarationDescriptor>): List<SamAdapterDescriptor<JavaMethodDescriptor>> {

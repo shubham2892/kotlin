@@ -84,7 +84,6 @@ class LazyJavaClassMemberScope(
         for (constructor in constructors) {
             val descriptor = resolveConstructor(constructor)
             result.add(descriptor)
-//            result.addIfNotNull(c.components.samConversionResolver.resolveSamAdapter(descriptor))
         }
 
         enhanceSignatures(
