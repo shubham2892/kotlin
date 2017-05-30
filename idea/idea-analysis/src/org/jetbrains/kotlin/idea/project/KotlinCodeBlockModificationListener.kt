@@ -31,7 +31,6 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getTopmostParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isAncestor
 import org.jetbrains.kotlin.psi.psiUtil.parents
-import org.jetbrains.kotlin.utils.addToStdlib.check
 
 /**
  * Tested in OutOfBlockModificationTestGenerated
@@ -82,17 +81,17 @@ class KotlinCodeBlockModificationListener(
             when (blockDeclaration) {
                 is KtNamedFunction -> {
                     if (blockDeclaration.hasBlockBody()) {
-                        return blockDeclaration.bodyExpression?.check { it.isAncestor(element) }
+                        return blockDeclaration.bodyExpression?.takeIf { it.isAncestor(element) }
                     }
                     else if (blockDeclaration.hasDeclaredReturnType()) {
-                        return blockDeclaration.initializer?.check { it.isAncestor(element) }
+                        return blockDeclaration.initializer?.takeIf { it.isAncestor(element) }
                     }
                 }
 
                 is KtProperty -> {
                     for (accessor in blockDeclaration.accessors) {
                         (accessor.initializer ?: accessor.bodyExpression)
-                                ?.check { it.isAncestor(element) }
+                                ?.takeIf { it.isAncestor(element) }
                                 ?.let { return it }
                     }
                 }
