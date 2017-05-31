@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
 
-class VarargInjectionLowering internal constructor(val context: CommonBackendContext): DeclarationContainerLoweringPass {
+class VarargInjectionLowering constructor(val context: CommonBackendContext): DeclarationContainerLoweringPass {
     override fun lower(irDeclarationContainer: IrDeclarationContainer) {
         irDeclarationContainer.declarations.forEach{
             when (it) {

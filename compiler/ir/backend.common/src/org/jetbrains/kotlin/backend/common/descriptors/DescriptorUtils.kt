@@ -16,6 +16,8 @@
 
 package org.jetbrains.kotlin.backend.common.descriptors
 
+import org.jetbrains.kotlin.builtins.functions.FunctionClassDescriptor
+import org.jetbrains.kotlin.builtins.getFunctionalClassKind
 import org.jetbrains.kotlin.coroutines.isSuspendLambda
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.incremental.components.NoLookupLocation
@@ -86,3 +88,8 @@ fun ClassDescriptor.getFunction(name: String, types: List<KotlinType>): Function
             .getContributedFunctions(Name.identifier(name), NoLookupLocation.FROM_BACKEND).single().substitute(typeSubstitutor)!!
 }
 
+val KotlinType.isFunctionOrKFunctionType: Boolean
+    get() {
+        val kind = constructor.declarationDescriptor?.getFunctionalClassKind()
+        return kind == FunctionClassDescriptor.Kind.Function || kind == FunctionClassDescriptor.Kind.KFunction
+    }

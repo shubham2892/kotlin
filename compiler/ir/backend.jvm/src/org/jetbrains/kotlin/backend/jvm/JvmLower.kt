@@ -16,8 +16,10 @@
 
 package org.jetbrains.kotlin.backend.jvm
 
+import org.jetbrains.kotlin.backend.common.lower.LateinitLowering
 import org.jetbrains.kotlin.backend.common.lower.LocalFunctionsLowering
 import org.jetbrains.kotlin.backend.common.lower.SharedVariablesLowering
+import org.jetbrains.kotlin.backend.common.lower.VarargInjectionLowering
 import org.jetbrains.kotlin.backend.common.runOnFilePostfix
 import org.jetbrains.kotlin.backend.jvm.lower.*
 import org.jetbrains.kotlin.ir.declarations.IrFile
@@ -28,6 +30,7 @@ class JvmLower(val context: JvmBackendContext) {
         FileClassLowering(context).lower(irFile)
         ConstAndJvmFieldPropertiesLowering().lower(irFile)
         PropertiesLowering().lower(irFile)
+
         InterfaceLowering(context.state).runOnFilePostfix(irFile)
         InterfaceDelegationLowering(context.state).runOnFilePostfix(irFile)
         SharedVariablesLowering(context).runOnFilePostfix(irFile)
@@ -40,5 +43,9 @@ class JvmLower(val context: JvmBackendContext) {
         SingletonReferencesLowering(context).runOnFilePostfix(irFile)
         SyntheticAccessorLowering(context.state).lower(irFile)
         BridgeLowering(context.state).runOnFilePostfix(irFile)
+
+        LateinitLowering(context).lower(irFile)
+
+        VarargInjectionLowering(context).runOnFilePostfix(irFile)
     }
 }

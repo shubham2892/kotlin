@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.types.KotlinType
 
-internal class LateinitLowering(val context: CommonBackendContext): FileLoweringPass {
+class LateinitLowering(val context: CommonBackendContext): FileLoweringPass {
     override fun lower(irFile: IrFile) {
         irFile.transformChildrenVoid(object: IrElementTransformerVoid() {
             override fun visitProperty(declaration: IrProperty): IrStatement {

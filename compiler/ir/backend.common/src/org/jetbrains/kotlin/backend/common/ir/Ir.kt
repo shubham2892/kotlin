@@ -119,9 +119,9 @@ open class Symbols<out T: CommonBackendContext>(val context: T, private val symb
 //    val valueOfForEnum = symbolTable.referenceSimpleFunction(
 //            context.getInternalFunctions("valueOfForEnum").single())
 //
-//    val getContinuation = symbolTable.referenceSimpleFunction(
-//            context.getInternalFunctions("getContinuation").single())
-//
+    val getContinuation = symbolTable.referenceSimpleFunction(
+            context.getInternalFunctions("getContinuation").single())
+
 //    val coroutineImpl = symbolTable.referenceClass(context.getInternalClass("CoroutineImpl"))
 
 //    val coroutineSuspendedGetter = symbolTable.referenceSimpleFunction(
