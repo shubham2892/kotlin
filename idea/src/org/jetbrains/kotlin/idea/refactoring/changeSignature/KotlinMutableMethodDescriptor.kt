@@ -40,6 +40,10 @@ class KotlinMutableMethodDescriptor(override val original: KotlinMethodDescripto
         }
     }
 
+    fun removeConstructor(){
+        original.method.delete()
+    }
+
     fun renameParameter(index: Int, newName: String) {
         parameters[index].name = newName
     }

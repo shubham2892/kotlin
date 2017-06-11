@@ -139,6 +139,8 @@ abstract class ChangeFunctionSignatureFix(
                             return originalDescriptor.modify { descriptor ->
                                 val index = if (descriptor.receiver != null) parameterDescriptor.index + 1 else parameterDescriptor.index
                                 descriptor.removeParameter(index)
+                                // Add a check to see if any parameters left
+                                descriptor.removeConstructor();
                             }
                         }
 
